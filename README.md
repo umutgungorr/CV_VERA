@@ -1,4 +1,4 @@
-# CVera
+# -CVera-
 
 CVera, PDF veya DOCX biçimindeki bir CV'nin teknik becerilerini hedef yazılım
 ilanıyla karşılaştıran, tahmini ATS uyum ön analizi sunan yerel bir Next.js
