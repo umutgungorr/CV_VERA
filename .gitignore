@@ -1,0 +1,36 @@
+# Dependencies and build output
+node_modules/
+.next/
+out/
+build/
+coverage/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Logs and local tooling
+*.log
+npm-debug.log*
+.vercel/
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# IDE and Editor directories
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Agent-local instruction files
+AGENTS.md
+CLAUDE.md

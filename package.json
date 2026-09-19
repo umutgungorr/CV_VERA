@@ -1,0 +1,28 @@
+{
+  "name": "resume-tailor-mvp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint app lib tests next.config.mjs eslint.config.mjs",
+    "test": "node --test",
+    "check": "npm run lint && npm test && npm run build"
+  },
+  "engines": {
+    "node": ">=20.16.0"
+  },
+  "dependencies": {
+    "mammoth": "^1.12.3",
+    "next": "16.3.5",
+    "pdf-parse": "^2.4.5",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.39.5",
+    "eslint-config-next": "16.3.5"
+  }
+}
