@@ -1,119 +1,129 @@
-# -CVera-
+<div align="center">
+  <img src="./assets/cvera-hero.svg" width="100%" alt="CVera — deterministic, privacy-first CV and job description matcher" />
+</div>
 
-CVera, PDF veya DOCX biçimindeki bir CV'nin teknik becerilerini hedef yazılım
-ilanıyla karşılaştıran, tahmini ATS uyum ön analizi sunan yerel bir Next.js
-MVP'sidir.
+<p align="center">
+  <strong>Compare a software résumé with a target role and surface the technical signals that matter.</strong>
+</p>
 
-> Bu sürüm yapay zekâ ile CV yeniden yazmaz. Anahtar kelime ve belge yapısı
-> tabanlı, deterministik bir ön analiz yapar. Skor bir işe alım veya gerçek ATS
-> performansı garantisi değildir.
+<p align="center">
+  <a href="#quick-start">Quick start</a> ·
+  <a href="#how-it-works">How it works</a> ·
+  <a href="#privacy--security">Privacy</a> ·
+  <a href="#limitations">Limitations</a>
+</p>
 
-## Özellikler
+## What is CVera?
 
-- PDF ve DOCX metin çıkarımı
-- Sahte uzantı, bozuk dosya ve 10 MB boyut kontrolü
-- CV yapısı doğrulaması
-- Yazılım iş ilanı doğrulaması ve anlamsız metin engelleme
-- Genişletilmiş teknik beceri eşleşmesi (.NET, ASP.NET, NodeJS, Vue, CI/CD, Docker vb.)
-- Doğrulanan ve eksik becerilerin görsel etiketlerle (chips) listelenmesi
-- Analiz özetini tek tıkla panoya kopyalama
-- Yeni analiz için tek tıkla formu sıfırlama
-- Tahmini ATS ön analiz skoru
-- Responsive ve erişilebilir arayüz
-- Dosyaları kalıcı depolamadan, istek belleğinde işleme (gizlilik odaklı)
+CVera is a local-first Next.js MVP that compares the technical skills found in
+a PDF or DOCX résumé with a Turkish or English software job description. It
+produces an explainable, estimated compatibility preview based on document
+structure and deterministic skill matching.
 
-## Teknolojiler
+> CVera does not rewrite résumés with AI and does not reproduce the behaviour
+> of a commercial ATS. Its score is an educational pre-analysis, not a hiring
+> outcome or performance guarantee.
 
-- Next.js 16 ve React 19
-- `pdf-parse` ile PDF metin çıkarımı
-- `mammoth` ile DOCX metin çıkarımı
-- Node.js yerleşik test runner (`node:test`)
-- ESLint ve Next.js Core Web Vitals kuralları
+| Private by design | Explainable matching | Defensive inputs |
+| --- | --- | --- |
+| Documents are parsed in request memory and are not written to a database or sent to a third-party service. | Matched and missing skills are traceable to deterministic rules rather than a black-box model. | File size, extension, signature, readable content and job-description quality are validated before analysis. |
 
-## Kurulum
+## Highlights
 
-Gereksinimler:
+- PDF and DOCX text extraction
+- File-signature, corruption and 10 MB size checks
+- Résumé structure and contact-signal validation
+- Turkish and English software job-description validation
+- Broad technical skill matching, including `.NET`, `Node.js`, `Vue`, CI/CD and Docker
+- Clearly separated matched and missing skill signals
+- One-click report copy and analysis reset
+- Responsive, accessible interface
+- Automated lint, unit-test and production-build checks in GitHub Actions
 
-- Node.js 20.16 veya üzeri; Node.js 22 önerilir
+## Tech stack
+
+| Layer | Technology |
+| --- | --- |
+| Product | Next.js 16, React 19, JavaScript |
+| Documents | `pdf-parse`, `mammoth` |
+| Validation | Deterministic rules and server-side parsing |
+| Quality | Node.js test runner, ESLint, GitHub Actions |
+
+## How it works
+
+```text
+PDF / DOCX résumé
+        │
+        ▼
+signature + size validation ──► in-memory text extraction
+                                        │
+job description ──► content checks ─────┤
+                                        ▼
+                              deterministic skill match
+                                        │
+                                        ▼
+                         matched skills · gaps · preview
+```
+
+An analysis starts only when:
+
+- the upload is a real PDF or DOCX no larger than 10 MB;
+- the document contains enough readable text and résumé-specific signals;
+- the job post includes a role, responsibilities or qualifications, and at
+  least one recognisable software skill;
+- repeated or low-diversity noise is rejected.
+
+## Quick start
+
+Requirements:
+
+- Node.js 20.16 or later; Node.js 22 recommended
 - npm
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/umutgungorr/cvera.git
 cd cvera
 npm ci
 npm run dev
 ```
 
-Uygulama varsayılan olarak [http://localhost:3000](http://localhost:3000)
-adresinde açılır.
+Open [http://localhost:3000](http://localhost:3000).
 
-## Komutlar
-
-```bash
-npm run dev    # Geliştirme sunucusu
-npm run lint   # Statik kod kontrolü
-npm test       # Birim testleri (18 birim testi)
-npm run build  # Production build
-npm run check  # Lint + test + build
-```
-
-## GitHub'a Yükleme (İlk Kurulum)
-
-Projeyi GitHub'a push etmek için terminalde sırasıyla şu adımları izleyebilirsiniz:
+### Verification commands
 
 ```bash
-# 1. Git deposunu başlatın (henüz başlatılmadıysa)
-git init
-
-# 2. Dosyaları ekleyin ve ilk commit'i oluşturun
-git add .
-git commit -m "feat: CVera ATS resume matching MVP"
-
-# 3. GitHub'daki yeni reponuzu ekleyin ve yükleyin
-git branch -M main
-git remote add origin https://github.com/KULLANICI_ADINIZ/REPONUZ.git
-git push -u origin main
+npm run lint
+npm test
+npm run build
+npm run check
 ```
 
-## Doğrulama davranışı
+## Privacy & security
 
-Bir analiz yalnızca şu koşullarda başlatılır:
+The uploaded document is parsed during the API request. This MVP does not
+persist the file to disk or a database and does not send it to an external
+analysis provider. Responses use `Cache-Control: no-store`.
 
-- Dosya gerçek bir PDF veya DOCX olmalı ve 10 MB'ı aşmamalı.
-- Belge yeterli okunabilir metin ile CV'ye özgü bölüm ve iletişim sinyalleri
-  içermeli.
-- İlan en az 30 kelime olmalı; rol, teknik unvan, sorumluluk/nitelik ve en az
-  bir tanınabilir yazılım becerisi içermeli.
-- Tekrarlanan veya düşük çeşitlilikteki anlamsız metinler reddedilir.
+Do not deploy the current MVP as an unrestricted public upload service without
+adding rate limiting, isolated document processing, malware scanning and
+production observability. See [SECURITY.md](SECURITY.md) for responsible
+disclosure guidance.
 
-## Gizlilik
+## Limitations
 
-Yüklenen dosya API isteği sırasında bellekte ayrıştırılır. Bu MVP dosyayı diske,
-veritabanına veya üçüncü taraf bir servise kaydetmez. Production dağıtımında
-rate limiting, izole belge işleme, malware taraması ve gözlemlenebilirlik ayrıca
-eklenmelidir.
+- Scanned PDFs without a text layer are not supported; there is no OCR fallback yet.
+- The preview score is keyword- and structure-based, not a commercial ATS simulation.
+- There is no account system, history, export or AI-assisted rewriting.
+- Validation currently focuses on Turkish and English software roles.
 
-## Bilinen sınırlar
+## Roadmap
 
-- Metin katmanı olmayan taranmış PDF'ler için OCR henüz yoktur.
-- Skor anahtar kelime tabanlıdır; ticari ATS sistemlerini taklit etmez.
-- AI destekli yeniden yazma, kullanıcı hesabı, geçmiş ve export henüz yoktur.
-- Doğrulama şu anda Türkçe ve İngilizce yazılım rollerine odaklıdır.
+- Evidence-linked, user-approved rewriting suggestions
+- OCR fallback for scanned documents
+- DOCX and PDF export
+- Authentication, analysis history and a defined data lifecycle
+- Rate limiting and isolated background document processing
 
-## Yol haritası
+## License
 
-- Kaynak kanıtlarına bağlı AI yeniden yazma
-- OCR fallback
-- DOCX/PDF export
-- Kullanıcı onaylı değişiklik paneli
-- Auth, işlem geçmişi ve 30 günlük veri yaşam döngüsü
-- Rate limiting ve background job altyapısı
-
-## Güvenlik
-
-Güvenlik açığını herkese açık issue olarak paylaşmayın. Ayrıntılar için
-[SECURITY.md](SECURITY.md) dosyasına bakın.
-
-## Lisans
-
-MIT
+[MIT](LICENSE)
