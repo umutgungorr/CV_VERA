@@ -124,6 +124,7 @@ disclosure guidance.
 - Authentication, analysis history and a defined data lifecycle
 - Rate limiting and isolated background document processing
 - yolo rozeti deneme
+- Pair rozeti denemesi
 
 ## License
 
