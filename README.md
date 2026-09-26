@@ -123,6 +123,7 @@ disclosure guidance.
 - DOCX and PDF export
 - Authentication, analysis history and a defined data lifecycle
 - Rate limiting and isolated background document processing
+- yolo rozeti deneme
 
 ## License
 
